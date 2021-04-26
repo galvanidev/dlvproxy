@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"log"
 	"net"
 )
@@ -21,7 +20,8 @@ func listen(con net.Conn) {
 		relaycon, err := net.Dial("tcp", "127.0.0.1:9000")
 		if err != nil {
 			log.Println(err)
-			break
+			con.Close()
+			return
 		}
 		log.Println("success ", relaycon)
 
@@ -30,7 +30,8 @@ func listen(con net.Conn) {
 		relaycon, err := net.Dial("tcp", "127.0.0.1:8081")
 		if err != nil {
 			log.Println(err)
-			break
+			con.Close()
+			return
 		}
 		log.Println("success ", relaycon)
 	}
@@ -56,9 +57,7 @@ func relaybuffer(reader *bufio.Reader, conn net.Conn) {
 }
 
 func main() {
-	port := flag.String("port", "5000", "listen port proxy")
-	flag.Parse()
-	server, err := net.Listen("tcp", ":"+*port)
+	server, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatal(err)
 	}
