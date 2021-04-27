@@ -13,11 +13,12 @@ func listen(con net.Conn) {
 
 	var relaycon net.Conn
 	var relayreader *bufio.Reader
+	var err error
 
 	switch b {
 	case 123:
 		log.Println("Relaying for delve debug")
-		relaycon, err := net.Dial("tcp", "127.0.0.1:9000")
+		relaycon, err = net.Dial("tcp", "127.0.0.1:9000")
 		if err != nil {
 			log.Println(err)
 			con.Close()
@@ -27,7 +28,7 @@ func listen(con net.Conn) {
 
 	default:
 		log.Println("Relaying for other process")
-		relaycon, err := net.Dial("tcp", "127.0.0.1:8081")
+		relaycon, err = net.Dial("tcp", "127.0.0.1:8081")
 		if err != nil {
 			log.Println(err)
 			con.Close()
